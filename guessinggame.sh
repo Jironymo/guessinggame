@@ -21,26 +21,26 @@ function isInteger {
   fi
 }
 
-#The function reads input only if it is a number and stores it in global user_input variable. Is intended to replace read.
+#The function reads input only if it is a number and stores it in global user_integer variable. Is intended to replace read.
 function readInteger {
   echo "Enter an integer below:"
-  read user_input
+  read user_integer
   #checking if input is valid. If not, prompt user for new input.
-  numberCheckResult=$(isInteger $user_input)
+  numberCheckResult=$(isInteger $user_integer)
   while [[ numberCheckResult -ne 0 ]]
   do
     echo "Given entry is not an integer. Please give a correct input below:"
-    read user_input
-    let numberCheckResult=$(isInteger $user_input)
+    read user_integer
+    let numberCheckResult=$(isInteger $user_integer)
   done
 }
 
 echo "Welcome to the guessing game, where you are tasked with finding out the number of files in the current directory."
 readInteger
-answer=$(ls -l | wc -l)
+answer=$(expr $(ls -l | wc -l) - 1)
 
 #comparing input value with the actual result.
-numbers_compared=$(compareTwoNumbers $user_input $answer)
+numbers_compared=$(compareTwoNumbers $user_integer $answer)
 while [[ $numbers_compared -ne 0 ]]
 do
   if [[ $numbers_compared -eq 1 ]]
@@ -51,6 +51,6 @@ do
   fi
   echo "Please enter your guess of how many files there are in this directory!"
   readInteger
-  let numbers_compared=$(compareTwoNumbers $user_input $answer)
+  let numbers_compared=$(compareTwoNumbers $user_integer $answer)
 done
 echo "Congrats! What a lucky devil!"
