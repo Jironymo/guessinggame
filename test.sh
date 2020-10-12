@@ -1,17 +1,27 @@
-function numberCheck {
-	result=0
-	if [[ $1 -gt $2 ]]
-	then
-	  let result=1
-	elif [[ $1 -lt $2 ]]
-	then
-	  let result=2
-	fi
-	echo $result
+#The function checks if the input is a positive integer.
+#Exit status: 0 - true; 1 - false.
+function isInteger {
+  if [[ $1 =~ ^[+-]*[0-9]+$ ]]
+  then
+    echo 0
+  else
+    echo 1
+  fi
 }
 
-echo "enter a number"
-read user_input
+#The function reads input only if it is a number.
+function readInteger {
+  echo "Enter an integer below:"
+  read user_input
+  #checking if input is valid. If not, prompt user for new input.
+  numberCheckResult=$(isInteger $user_input)
+  while [[ numberCheckResult -ne 0 ]]
+  do
+    echo "Given entry is not a positive integer. Please give a correct input below:"
+    read user_input
+    let numberCheckResult=$(isInteger $user_input)
+  done
+}
 
-myvar=$(numberCheck $user_input 4)
-echo "$myvar"
+readInteger myinp
+echo $user_input
